@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lebonbon Web</title>
+  <style>
+    body {
+      background: #1f1f1f;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    input {
+      padding: 10px;
+      width: 300px;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #ff4b81;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+    iframe {
+      width: 90%;
+      height: 80vh;
+      border: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍬 lebonbon Web</h1>
+  <input type="text" id="url" placeholder="Enter URL (e.g. https://example.com)">
+  <button onclick="goSite()">Go</button>
+  <iframe id="frame" style="display: none;"></iframe>
+
+  <script>
+    function goSite() {
+      let input = document.getElementById("url").value;
+      if (!input.startsWith("http")) {
+        input = "https://" + input;
+      }
+      document.getElementById("frame").src = input;
+      document.getElementById("frame").style.display = "block";
+    }
+  </script>
+</body>
+</html>
