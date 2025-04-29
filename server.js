@@ -1,15 +1,17 @@
 const express = require("express");
 const fetch = require("node-fetch");
+const path = require("path");
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static("public"));
+// Serve static files from "public" folder (optional, adjust if needed)
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/proxy", async (req, res) => {
+// General request handler (can act as a web fetcher)
+app.get("/go", async (req, res) => {
   const targetUrl = req.query.url;
-  if (!targetUrl) {
-    return res.status(400).send("Missing URL parameter");
-  }
+  if (!targetUrl) return res.status(400).send("Missing URL");
 
   try {
     const response = await fetch(targetUrl);
@@ -22,23 +24,11 @@ app.get("/proxy", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Serve static files from the "public" folder
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Redirect all GET requests to index.html (for SPAs or basic sites)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Catch-all to route everything else to index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
