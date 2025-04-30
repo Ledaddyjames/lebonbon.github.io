@@ -1,15 +1,12 @@
-const express = require("express");
-const fetch = require("node-fetch");
-const path = require("path");
+const express = require('express');
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
+const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-// Serve static files from "public" folder (optional, adjust if needed)
-app.use(express.static(path.join(__dirname, "public")));
-
-// General request handler (can act as a web fetcher)
-const cheerio = require('cheerio');
+app.use(express.static('public'));
 
 app.get('/go', async (req, res) => {
   const targetUrl = req.query.url;
@@ -19,10 +16,8 @@ app.get('/go', async (req, res) => {
     const response = await fetch(targetUrl);
     let html = await response.text();
 
-    // Load HTML into Cheerio to modify it
     const $ = cheerio.load(html);
 
-    // Rewrite relative URLs
     $('img').each((_, el) => {
       const src = $(el).attr('src');
       if (src && !src.startsWith('http')) {
@@ -48,12 +43,6 @@ app.get('/go', async (req, res) => {
   } catch (err) {
     res.status(500).send('Error fetching or rewriting target content');
   }
-});
-
-
-// Catch-all to route everything else to index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(PORT, () => {
